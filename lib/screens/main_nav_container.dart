@@ -5,7 +5,6 @@ import '../widgets/ambient_background.dart';
 import '../widgets/app_logo.dart';
 import 'explore/explore_screen.dart';
 import 'roadmap/roadmap_detail_screen.dart';
-import 'tabs/search_screen.dart';
 import 'tabs/settings_screen.dart';
 
 class MainNavContainer extends StatefulWidget {
@@ -33,7 +32,6 @@ class _MainNavContainerState extends State<MainNavContainer> {
     _HomeTab(),
     ExploreScreen(),
     _RoadmapTab(),
-    SearchScreen(),
     SettingsScreen(),
   ];
 
@@ -81,11 +79,6 @@ class _MainNavContainerState extends State<MainNavContainer> {
               icon: Icon(Icons.alt_route_outlined),
               activeIcon: Icon(Icons.alt_route_rounded),
               label: 'Roadmap',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search_outlined),
-              activeIcon: Icon(Icons.search_rounded),
-              label: 'Search',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings_outlined),
