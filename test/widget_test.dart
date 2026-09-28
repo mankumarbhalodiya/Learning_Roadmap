@@ -25,7 +25,7 @@ void main() {
     expect(bottomNav.items.any((item) => item.label == 'Search'), isFalse);
   });
 
-  testWidgets('ExploreScreen includes search bar and category filters', (WidgetTester tester) async {
+  testWidgets('ExploreScreen has search without any filter options', (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: AppTheme.lightTheme,
@@ -33,19 +33,38 @@ void main() {
       ),
     );
 
-    // Verify search bar is present in explore
+    // 1. Initial Explore View: Search bar and categories are visible, NO filter icon or chips
     expect(find.byType(TextField), findsOneWidget);
     expect(find.text('Search skills, roadmaps, topics...'), findsOneWidget);
+    expect(find.text('All Roadmaps by Category'), findsOneWidget);
+    expect(find.byIcon(Icons.tune_rounded), findsNothing);
+    expect(find.byType(FilterChip), findsNothing);
+    expect(find.text('Recent Searches'), findsNothing);
+    expect(find.text('Trending Roadmaps'), findsNothing);
 
-    // Verify category chips in explore
-    expect(find.text('All'), findsOneWidget);
-    expect(find.text('Software & Web'), findsOneWidget);
+    // 2. Click on the search field: Enters search mode!
+    await tester.tap(find.byType(TextField));
+    await tester.pump(const Duration(milliseconds: 100));
 
-    // Test typing in search bar
+    // Now Recent Searches & Trending Roadmaps appear, still NO filter options
+    expect(find.text('Recent Searches'), findsOneWidget);
+    expect(find.text('Trending Roadmaps'), findsOneWidget);
+    expect(find.byIcon(Icons.tune_rounded), findsNothing);
+    expect(find.byType(FilterChip), findsNothing);
+
+    // 3. Type in the search field
     await tester.enterText(find.byType(TextField), 'Flutter');
     await tester.pump(const Duration(milliseconds: 100));
 
-    // Verify search results appear
+    // Search results appear
     expect(find.text('Flutter Developer'), findsOneWidget);
+
+    // 4. Click back button in search bar: Exits search mode and restores normal explore view
+    await tester.tap(find.byIcon(Icons.arrow_back_rounded));
+    await tester.pump(const Duration(milliseconds: 100));
+
+    expect(find.text('All Roadmaps by Category'), findsOneWidget);
+    expect(find.text('Recent Searches'), findsNothing);
+    expect(find.text('Trending Roadmaps'), findsNothing);
   });
 }
